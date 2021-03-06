@@ -21,6 +21,18 @@ void list::createEmpty(List &l)
     aux->prev = aux;
     l = aux;
 }
+/* restituisce la dimensione della lista */
+int list::size(const List &l)
+{
+    int size = 0;
+    node *tmp = l;
+    while (tmp->next != l)
+    {
+        size++;
+        tmp = tmp->next;
+    }
+    return size;
+}
 /* "smantella" la lista svuotandola */
 void list::clear(const List &l)
 {
@@ -95,4 +107,48 @@ void reverse_print(const List &l)
         std::cout << a->info << std::endl;
         a = a->prev;
     }
+}
+
+/* inserisce l'elemento in posizione pos, shiftando a destra gli altri elementi */
+void list::add(int pos, Elem e, const List &l)
+{
+    if (pos > size(l))
+        throw std::string("err");
+    node *scorro = l->next;
+    int posizione = 0;
+    node *aux = new node;
+    aux->info = e;
+    if (l->next == l)
+    {
+        aux->next = l;
+        l->next = aux;
+        aux->prev = l;
+        l->prev = aux;
+        return;
+    }
+    while (pos != posizione)
+    {
+        posizione++;
+        scorro = scorro->next;
+    }
+    if (scorro->next == l)
+    {
+        scorro->next = aux;
+        aux->prev = scorro;
+        aux->next = l;
+        l->prev = aux;
+        return;
+    }
+    if (pos == 0)
+    {
+        aux->next = l->next;
+        l->next->prev = aux;
+        l->next = aux;
+        aux->prev = l;
+        return;
+    }
+    aux->next = scorro;
+    aux->prev = scorro->prev;
+    scorro->prev->next = aux;
+    scorro->prev = aux;
 }
