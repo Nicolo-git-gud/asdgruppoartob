@@ -25,8 +25,8 @@ void list::createEmpty(List &l)
 int list::size(const List &l)
 {
     int size = 0;
-    node *tmp = l;
-    while (tmp->next != l)
+    node *tmp = l->next;
+    while (tmp!= l)
     {
         size++;
         tmp = tmp->next;
@@ -112,6 +112,7 @@ void reverse_print(const List &l)
 /* inserisce l'elemento in posizione pos, shiftando a destra gli altri elementi */
 void list::add(int pos, Elem e, const List &l)
 {
+    //Come negli array e nei vector la posizione 0 è effettivamente quello che noi chiamiamo primo elemento
     if (pos > size(l))
         throw std::string("err");
     node *scorro = l->next;

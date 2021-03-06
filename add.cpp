@@ -30,4 +30,9 @@ int main()
     print(l);
     std::cout << "Provo la reverse print" << std::endl;
     reverse_print(l);
+     add(5, 8, l);
+    std::cout << "Provo la print" << std::endl;
+    print(l);
+    std::cout << "Provo la reverse print" << std::endl;
+    reverse_print(l);
 }
