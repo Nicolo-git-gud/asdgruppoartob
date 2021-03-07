@@ -87,20 +87,9 @@ void list::addRear(Elem e, const List &l)
     node *aux = new node;
     aux->info = e;
     aux->next = l;
-
-    if (l->next == l)
-    {
-        l->next = aux;
-        aux->prev = l;
-        l->prev = aux;
-    }
-    else
-    {
-        node *scorro = l->prev;
-        scorro->next = aux;
-        aux->prev = scorro;
-        l->prev = aux;
-    }
+    aux->prev = l->prev;
+    l->prev->next = aux;
+    l->prev = aux;
 }
 /* stampa la lista */
 void print(const List &l)
@@ -115,20 +104,12 @@ void print(const List &l)
 void list::addFront(Elem e, const List &l)
 {
     node *aux = new node;
+    node *tmp = l->next;
     aux->info = e;
+    l->next = aux;
+    aux->next = tmp;
+    tmp->prev = aux;
     aux->prev = l;
-    if (l->next == l)
-    {
-        l->next = aux;
-        aux->next = l;
-        l->prev = aux;
-    }
-    else
-    {
-        l->next->prev = aux;
-        aux->next = l->next;
-        l->next = aux;
-    }
 }
 void reverse_print(const List &l)
 {
@@ -145,54 +126,28 @@ void reverse_print(const List &l)
 void list::add(int pos, Elem e, const List &l)
 {
     //Come negli array e nei vector la posizione 0 è effettivamente quello che noi chiamiamo primo elemento
-    if (pos > size(l) + 1)
+    if (pos > size(l))
         throw std::string("err");
-    node *scorro = l->next;
-    int posizione = 0;
+        int posizione = 0;
+        node *tmp = l->next;
+    while(posizione!=pos){
+        posizione ++;
+        tmp = tmp->next;
+    }
     node *aux = new node;
     aux->info = e;
-    if (l->next == l)
-    {
-        aux->next = l;
-        l->next = aux;
-        aux->prev = l;
-        l->prev = aux;
-        return;
-    }
-    while (pos != posizione)
-    {
-        posizione++;
-        scorro = scorro->next;
-    }
-    if (pos == size(l))
-    {
-        aux->next = scorro;
-        aux->prev = scorro->prev;
-        scorro->prev->next = aux;
-        scorro->prev = aux;
+    aux->next = tmp;
+    aux->prev = tmp->prev;
+    tmp->prev->next = aux;
+    tmp->prev = aux;
 
-        return;
-    }
-    if (pos == size(l) + 1)
-    {
-        scorro->next = aux;
-        aux->prev = scorro;
-        aux->next = l;
-        l->prev = aux;
-        return;
-    }
-    if (pos == 0)
-    {
-        aux->next = l->next;
-        l->next->prev = aux;
-        l->next = aux;
-        aux->prev = l;
-        return;
-    }
-    aux->next = scorro;
-    aux->prev = scorro->prev;
-    scorro->prev->next = aux;
-    scorro->prev = aux;
+
+   
+   
+    
+
+    
+   
 }
 
 /* cancella l'elemento in posizione pos dalla lista */
@@ -225,7 +180,7 @@ void list::removeEl(Elem e, const List &l)
     }
     if (aux->info == e)
     {
-       removePos(pos, l);
+        removePos(pos, l);
         if (aux->next == l)
             return;
         return removeEl(e, l);
