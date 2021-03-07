@@ -164,10 +164,13 @@ void list::add(int pos, Elem e, const List &l)
         posizione++;
         scorro = scorro->next;
     }
-    if (pos == size(l)-1)
+    if (pos == size(l))
     {
         aux->next = scorro;
         aux->prev = scorro->prev;
+        scorro->prev->next = aux;
+        scorro->prev = aux;
+        
         return;
     }
     if (pos == size(l)+1)
