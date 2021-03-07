@@ -87,19 +87,19 @@ void list::addRear(Elem e, const List &l)
     node *aux = new node;
     aux->info = e;
     aux->next = l;
-    l->prev = aux;
+
     if (l->next == l)
     {
         l->next = aux;
         aux->prev = l;
+        l->prev = aux;
     }
     else
     {
-        node *scorro = l;
-        while (scorro->next != l)
-            scorro = scorro->next;
+        node *scorro = l->prev;
         scorro->next = aux;
         aux->prev = scorro;
+        l->prev = aux;
     }
 }
 /* stampa la lista */
@@ -145,7 +145,7 @@ void reverse_print(const List &l)
 void list::add(int pos, Elem e, const List &l)
 {
     //Come negli array e nei vector la posizione 0 è effettivamente quello che noi chiamiamo primo elemento
-    if (pos > size(l))
+    if (pos > size(l)+1)
         throw std::string("err");
     node *scorro = l->next;
     int posizione = 0;
@@ -184,4 +184,23 @@ void list::add(int pos, Elem e, const List &l)
     aux->prev = scorro->prev;
     scorro->prev->next = aux;
     scorro->prev = aux;
+}
+
+
+/* cancella l'elemento in posizione pos dalla lista */
+void list::removePos(int pos, const List &l)
+{
+    int posizione = 0;
+    if(pos>size(l)||l->next == l)
+    throw std::string ("err");
+    node *aux = l->next;
+    while(pos!=posizione){
+        posizione ++;
+        aux = aux->next;
+    }
+    node *tmp = aux;
+     aux->prev->next = aux->next;
+     aux->next->prev = aux->prev;
+     delete tmp;
+    
 }
