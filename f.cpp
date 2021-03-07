@@ -22,11 +22,16 @@ void list::createEmpty(List &l)
     l = aux;
 }
 /* restituisce la dimensione della lista */
+bool list::isEmpty(const List &l)
+{
+    return (l->next == l);
+}
+
 int list::size(const List &l)
 {
     int size = 0;
     node *tmp = l->next;
-    while (tmp!= l)
+    while (tmp != l)
     {
         size++;
         tmp = tmp->next;
@@ -46,9 +51,36 @@ void list::clear(const List &l)
     l->next = l;
     l->prev = l;
 }
+/* restituisce l'elemento in posizione pos se presente; restituisce un elemento 
+che per convenzione si decide che rappresenta l'elemento vuoto altrimenti*/
+Elem list::get(int pos, const List &l)
+{
+    Elem vuoto = -123456789;
+    if (pos > size(l) || l->next == l)
+        return vuoto;
+    int posizione = 0;
+    node *scorro = l->next;
+    while (pos != posizione)
+    {
+        posizione++;
+        scorro = scorro->next;
+    }
+    return scorro->info;
+}
 /* modifica l'elemento in posizione pos, se la posizione e' ammissibile */
 void list::set(int pos, Elem e, const List &l)
 {
+    //Come negli array e nei vector la posizione 0 è effettivamente quello che noi chiamiamo primo elemento
+    if (pos > size(l) || l->next == l)
+        throw std::string("err");
+    int posizione = 0;
+    node *scorro = l->next;
+    while (pos != posizione)
+    {
+        posizione++;
+        scorro = scorro->next;
+    }
+    scorro->info = e;
 }
 void list::addRear(Elem e, const List &l)
 {
