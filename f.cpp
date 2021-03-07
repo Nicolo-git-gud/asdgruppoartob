@@ -145,7 +145,7 @@ void reverse_print(const List &l)
 void list::add(int pos, Elem e, const List &l)
 {
     //Come negli array e nei vector la posizione 0 è effettivamente quello che noi chiamiamo primo elemento
-    if (pos > size(l)+1)
+    if (pos > size(l) + 1)
         throw std::string("err");
     node *scorro = l->next;
     int posizione = 0;
@@ -170,10 +170,10 @@ void list::add(int pos, Elem e, const List &l)
         aux->prev = scorro->prev;
         scorro->prev->next = aux;
         scorro->prev = aux;
-        
+
         return;
     }
-    if (pos == size(l)+1)
+    if (pos == size(l) + 1)
     {
         scorro->next = aux;
         aux->prev = scorro;
@@ -195,21 +195,39 @@ void list::add(int pos, Elem e, const List &l)
     scorro->prev = aux;
 }
 
-
 /* cancella l'elemento in posizione pos dalla lista */
 void list::removePos(int pos, const List &l)
 {
     int posizione = 0;
-    if(pos>size(l)||l->next == l)
-    throw std::string ("err");
+    if (pos > size(l) || l->next == l)
+        throw std::string("err");
     node *aux = l->next;
-    while(pos!=posizione){
-        posizione ++;
+    while (pos != posizione)
+    {
+        posizione++;
         aux = aux->next;
     }
     node *tmp = aux;
-     aux->prev->next = aux->next;
-     aux->next->prev = aux->prev;
-     delete tmp;
-    
+    aux->prev->next = aux->next;
+    aux->next->prev = aux->prev;
+    delete tmp;
+}
+
+/* cancella tutte le occorrenze dell'elemento elem, se presenti, dalla lista */
+void list::removeEl(Elem e, const List &l)
+{
+    int pos = 0;
+    node *aux = l->next;
+    while (aux->info != e && aux->next != l)
+    {
+        pos++;
+        aux = aux->next;
+    }
+    if (aux->info == e)
+    {
+       removePos(pos, l);
+        if (aux->next == l)
+            return;
+        return removeEl(e, l);
+    }
 }
